@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Parcelas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/parcelas/nuevo">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionChange)="onSearchChange($event)"
+      placeholder="Buscar parcelas..."
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let parcela of parcelas">
+      <ion-item>
+        <ion-label>
+          <h2>{{ parcela.DESC_LOTE }}</h2>
+          <p>Lote: {{ parcela.LOTE }}</p>
+          <p>Superficie: {{ parcela.SUPERFICIE }} ha</p>
+          <p>Localidad: {{ parcela.LOCALIDAD }}</p>
+          <p>Cliente: {{ parcela.CLIENTE }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option 
+          color="primary"
+          [routerLink]="['/parcelas/editar', parcela.REGISTRO]">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-item-option>
+        <ion-item-option 
+          color="danger"
+          (click)="confirmDelete(parcela)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div class="ion-text-center ion-padding" *ngIf="parcelas.length > 0 && currentPage < totalPages">
+    <ion-text color="medium">Desliza hacia abajo para ver más parcelas</ion-text>
+    <ion-icon name="chevron-down" color="medium"></ion-icon>
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="currentPage >= totalPages">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más parcelas...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/parcelas/nuevo">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

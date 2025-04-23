@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/parcelas"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isEdit ? 'Editar' : 'Nueva' }} Parcela</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="parcelaForm" (ngSubmit)="onSubmit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating">Descripción del Lote</ion-label>
+        <ion-input
+          type="text"
+          formControlName="DESC_LOTE"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="ion-padding-start" *ngIf="parcelaForm.get('DESC_LOTE')?.touched && parcelaForm.get('DESC_LOTE')?.errors?.['required']">
+        La descripción del lote es requerida
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="floating">Lote</ion-label>
+        <ion-input
+          type="text"
+          formControlName="LOTE"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="ion-padding-start" *ngIf="parcelaForm.get('LOTE')?.touched && parcelaForm.get('LOTE')?.errors?.['required']">
+        El lote es requerido
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="floating">Superficie (ha)</ion-label>
+        <ion-input
+          type="number"
+          formControlName="SUPERFICIE"
+          required
+          step="0.01"
+          min="0"
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="ion-padding-start" *ngIf="parcelaForm.get('SUPERFICIE')?.touched && parcelaForm.get('SUPERFICIE')?.errors?.['required']">
+        La superficie es requerida
+      </ion-text>
+      <ion-text color="danger" class="ion-padding-start" *ngIf="parcelaForm.get('SUPERFICIE')?.touched && parcelaForm.get('SUPERFICIE')?.errors?.['min']">
+        La superficie debe ser mayor a 0
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="floating">Localidad</ion-label>
+        <ion-input
+          type="text"
+          formControlName="LOCALIDAD"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="ion-padding-start" *ngIf="parcelaForm.get('LOCALIDAD')?.touched && parcelaForm.get('LOCALIDAD')?.errors?.['required']">
+        La localidad es requerida
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="floating">Cliente</ion-label>
+        <ion-input
+          type="text"
+          formControlName="CLIENTE"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-text color="danger" class="ion-padding-start" *ngIf="parcelaForm.get('CLIENTE')?.touched && parcelaForm.get('CLIENTE')?.errors?.['required']">
+        El cliente es requerido
+      </ion-text>
+    </ion-list>
+
+    <div class="ion-padding">
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="!parcelaForm.valid"
+      >
+        {{ isEdit ? 'Actualizar' : 'Crear' }} Parcela
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

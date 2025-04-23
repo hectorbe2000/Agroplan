@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Proveedores</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/proveedores/nuevo">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar proveedores"
+      [debounce]="500"
+      (ionChange)="onSearchChange($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let proveedor of proveedores">
+      <ion-item>
+        <ion-label>
+          <h2>{{ proveedor.descripcion }}</h2>
+          <p>Código: {{ proveedor.codigo }}</p>
+          <p>Correo: {{ proveedor.correo }}</p>
+          <p>Teléfono: {{ proveedor.telefono }}</p>
+          <p>Dirección: {{ proveedor.direccion }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option 
+          color="primary"
+          [routerLink]="['/proveedores/editar', proveedor.codigo]">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-item-option>
+        <ion-item-option 
+          color="danger"
+          (click)="confirmDelete(proveedor)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div class="ion-text-center ion-padding" *ngIf="proveedores.length > 0 && currentPage < totalPages">
+    <ion-text color="medium">Desliza hacia abajo para ver más proveedores</ion-text>
+    <ion-icon name="chevron-down" color="medium"></ion-icon>
+  </div>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="currentPage >= totalPages">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más proveedores...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/proveedores/nuevo">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
