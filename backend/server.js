@@ -1,16 +1,20 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
+const aplicacionesRouter = require('./routes/aplicaciones');
 
 const app = express();
 const port = 3001;
 
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: ['http://localhost:4200', 'http://localhost:8100'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
+
+// Rutas de aplicaciones
+app.use('/api/aplicaciones', aplicacionesRouter);
 
 // Obtener todos los proveedores
 app.get('/api/proveedores', async (req, res) => {

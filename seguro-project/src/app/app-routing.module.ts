@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: 'aplicadores/editar/:id',
     loadChildren: () => import('./pages/aplicadores/aplicador-form/aplicador-form.module').then(m => m.AplicadorFormPageModule)
+  },
+  {
+    path: 'aplicaciones',
+    loadChildren: () => import('./pages/aplicaciones/aplicaciones.module').then(m => m.AplicacionesPageModule)
   }
 ];
 

@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Registro de Aplicaciones</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="exportToExcel()">
+        <ion-icon name="download-outline"></ion-icon>
+        Excel
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar aplicación..."
+      (ionInput)="onSearch($event)"
+      [value]="searchTerm">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/aplicaciones/crear">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let aplicacion of aplicaciones">
+      <ion-item>
+        <ion-label>
+          <h2>{{ aplicacion.cultivo }}</h2>
+          <h3>{{ aplicacion.fecha | date:'dd/MM/yyyy' }}</h3>
+          <p>
+            <ion-text color="medium">Producto:</ion-text> {{ aplicacion.producto }}
+          </p>
+          <p>
+            <ion-text color="medium">Aplicador:</ion-text> {{ aplicacion.aplicador }}
+          </p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option
+          color="success"
+          (click)="exportarAplicacion(aplicacion.registro)">
+          <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option
+          color="primary"
+          [routerLink]="['/aplicaciones/editar', aplicacion.registro]">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option
+          color="danger"
+          (click)="onDeleteAplicacion(aplicacion.registro!)">
+          <!-- El operador ! indica que estamos seguros que registro no será nulo -->
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-grid *ngIf="aplicaciones.length === 0">
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-text color="medium">
+          No hay aplicaciones registradas
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          expand="block"
+          fill="clear"
+          [disabled]="currentPage === 1"
+          (click)="prevPage()">
+          <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+          Anterior
+        </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-center">
+        <ion-text color="medium">
+          Página {{ currentPage }} de {{ totalPages }}
+        </ion-text>
+      </ion-col>
+      <ion-col>
+        <ion-button
+          expand="block"
+          fill="clear"
+          [disabled]="currentPage >= totalPages"
+          (click)="nextPage()">
+          Siguiente
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,31 @@
+export interface Aplicacion {
+    registro?: number;
+    fecha: string;
+    cultivo: string;
+    area: number;
+    producto: string;
+    descripcion: string;
+    ingrediente_activo: string;
+    dosis: string;
+    objetivo: string;
+    aplicador: string;
+    epi_usado: boolean;
+    tipo_pico: string;
+    vol_agua: number;
+    temperatura: number;
+    humedad: number;
+    velocidad_viento: number;
+    departamento: string;
+    distrito: string;
+    localidad: string;
+    parcela_nro: string;
+    matricula_profesional: string;
+    registro_senave: string;
+    entidad_comercializadora: string;
+    reg_producto: string;
+    productor: string;
+    receta_nro?: string;
+    fecha_exp?: string;
+    created_at?: string;
+    updated_at?: string;
+}
