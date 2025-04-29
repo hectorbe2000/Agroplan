@@ -2,19 +2,30 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db');
 const aplicacionesRouter = require('./routes/aplicaciones');
+const productosRouter = require('./routes/productos');
 
 const app = express();
 const port = 3001;
 
 app.use(cors({
-  origin: ['http://localhost:4200', 'http://localhost:8100'],
+  origin: function(origin, callback) {
+    if (!origin || origin.startsWith('http://localhost')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Disposition']
 }));
 app.use(express.json());
 
 // Rutas de aplicaciones
 app.use('/api/aplicaciones', aplicacionesRouter);
+
+// Rutas de productos
+app.use('/api/productos', productosRouter);
 
 // Obtener todos los proveedores
 app.get('/api/proveedores', async (req, res) => {

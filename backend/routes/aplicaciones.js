@@ -160,7 +160,6 @@ router.post('/', async (req, res) => {
 
         const query = `
             INSERT INTO aplicaciones (
-                "REGISTRO",
                 "FECHA",
                 "CULTIVO",
                 "AREA",
@@ -176,7 +175,6 @@ router.post('/', async (req, res) => {
                 "TEMPERATURA",
                 "HUMEDAD",
                 "VIENTO",
-                "PRODUCTOR",
                 "DEPARTAMENTO",
                 "DISTRITO",
                 "LOCALIDAD",
@@ -185,11 +183,11 @@ router.post('/', async (req, res) => {
                 "REGISTRO_SENAVE",
                 "ENTIDAD_COMERCIALIZADORA",
                 "REG_PRODUCTO",
+                "PRODUCTOR",
                 "RECETA_NRO",
                 "FECHA_EXP"
             ) VALUES (
-                COALESCE((SELECT MAX("REGISTRO") FROM aplicaciones), 0) + 1,
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26
             ) RETURNING *`;
 
         const values = [
@@ -197,7 +195,7 @@ router.post('/', async (req, res) => {
             cultivo,
             area,
             producto,
-            descripcion,
+            descripcion || '',
             ingrediente_activo,
             dosis,
             objetivo,
@@ -208,7 +206,6 @@ router.post('/', async (req, res) => {
             temperatura,
             humedad,
             velocidad_viento,
-            productor,
             departamento,
             distrito,
             localidad,
@@ -217,9 +214,9 @@ router.post('/', async (req, res) => {
             '2',   // REGISTRO_SENAVE
             safeEntidadComercializadora,
             safeRegProducto,
+            productor,
             safeRecetaNro,
-            safeFechaExp,
-            'Ing. Agr. Victor Garay M.' // ASESOR_TECNICO
+            safeFechaExp
         ];
 
         const result = await db.query(query, values);
@@ -526,11 +523,11 @@ router.get('/export/excel', async (req, res) => {
 });
 
 // Exportar una aplicación a Excel
-router.get('/exportar/:id', async (req, res) => {
+router.get('/:registro/export/excel', async (req, res) => {
     try {
-        const { id } = req.params;
+        const { registro } = req.params;
 
-        const result = await db.query('SELECT * FROM aplicaciones WHERE "REGISTRO" = $1', [id]);
+        const result = await db.query('SELECT * FROM aplicaciones WHERE "REGISTRO" = $1', [registro]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: 'Aplicación no encontrada' });

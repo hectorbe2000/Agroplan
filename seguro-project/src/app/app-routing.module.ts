@@ -3,6 +3,18 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'productos',
+    loadChildren: () => import('./pages/productos/productos.module').then(m => m.ProductosPageModule)
+  },
+  {
+    path: 'productos/add',
+    loadChildren: () => import('./pages/productos/producto-form/producto-form.module').then(m => m.ProductoFormPageModule)
+  },
+  {
+    path: 'productos/edit/:registro',
+    loadChildren: () => import('./pages/productos/producto-form/producto-form.module').then(m => m.ProductoFormPageModule)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
